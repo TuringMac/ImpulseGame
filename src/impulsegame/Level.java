@@ -32,4 +32,12 @@ public class Level {
     public int[][] getMap(){
         return map;
     }
+    
+    public int getWidth(){
+        return width;
+    }
+    
+    public int getHeight(){
+        return height;
+    }
 }

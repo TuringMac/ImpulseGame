@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 /**
@@ -21,15 +23,14 @@ public class ImpulseGame extends javax.swing.JFrame {
      */
     private Ball my;
     private Timer tmr;
+    private JPanel[][] terrain;
     
     public ImpulseGame() {
         initComponents();
-        Level level1 = new Level();
-        int[][] map = level1.getMap();
-        Graphics g = mainBoard.getGraphics();
-        my = new Ball(g);
-        g.setColor(Color.BLACK);
-        g.drawLine(0, 20, 100, 20);
+        Level level = new Level();
+        terrain
+        my = new Ball(mainBoard.getGraphics(),new Position(37.5,37.5));
+        
         int delay = 100; //milliseconds
         ActionListener taskPerformer = new ActionListener() {
             @Override
@@ -38,8 +39,8 @@ public class ImpulseGame extends javax.swing.JFrame {
                 my.getData(jLabel1, jLabel2);
             }
         };
-        tmr = new Timer(delay, taskPerformer);
-        tmr.start();
+        tmr = new Timer(delay, taskPerformer); //Таймер обработки движения и физики
+        //tmr.start();
     }
 
     /**
@@ -62,10 +63,9 @@ public class ImpulseGame extends javax.swing.JFrame {
             }
         });
 
-        mainBoard.setBackground(new java.awt.Color(255, 255, 255));
         mainBoard.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                ImpulseGame.this.mousePressed(evt);
+                mainBoardMousePressed(evt);
             }
         });
 
@@ -73,11 +73,11 @@ public class ImpulseGame extends javax.swing.JFrame {
         mainBoard.setLayout(mainBoardLayout);
         mainBoardLayout.setHorizontalGroup(
             mainBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 522, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         mainBoardLayout.setVerticalGroup(
             mainBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 354, Short.MAX_VALUE)
+            .addGap(0, 349, Short.MAX_VALUE)
         );
 
         jLabel1.setText("jLabel1");
@@ -96,7 +96,7 @@ public class ImpulseGame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 488, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -104,7 +104,7 @@ public class ImpulseGame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(mainBoard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2))
@@ -113,16 +113,39 @@ public class ImpulseGame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mousePressed
-        my.setForce(evt.getPoint());
-    }//GEN-LAST:event_mousePressed
-
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if(evt.getKeyChar()==' ')
+        if(evt.getKeyChar()==' ') //Остановка времени по нажатию пробела
             if(tmr.isRunning())tmr.stop();
             else               tmr.start();
+        if(evt.getKeyCode()==KeyEvent.VK_ESCAPE)System.exit(1); //Выход по клавише Esc
     }//GEN-LAST:event_formKeyPressed
 
+    private void mainBoardMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainBoardMousePressed
+        my.setForce(evt.getPoint());
+    }//GEN-LAST:event_mainBoardMousePressed
+    /*
+     * Прорисовка уровня игры
+     * @param g   Объект для рисования на нем
+     * @param lvl Уровень для рисования на объекте
+     */
+    public void buildLevel(Graphics g, Level lvl){
+        Color tmp;
+        for(int i=0; i<lvl.getHeight(); i++){
+            for(int j=0; j<lvl.getWidth(); j++){
+                switch(lvl.getMap()[i][j]){
+                    case 0: g.setColor(Color.WHITE);
+                            g.drawRect(j*25, i*25, 25, 25);
+                            break;
+                    case 1: g.setColor(Color.BLACK);
+                            g.drawRect(j*25, i*25, 25, 25);
+                            break;
+                    case 2: break;
+                        
+                    default: break;
+                }
+            }
+        }
+    }
     /**
      * @param args the command line arguments
      */

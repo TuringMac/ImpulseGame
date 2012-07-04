@@ -23,6 +23,11 @@ public class Position extends Point{
         this.y=p.getY();
     }
     
+    Position(double x, double y){
+        this.x=x;
+        this.y=y;
+    }
+    
     public void translate(double dx, double dy){
         this.x+=dx;
         this.y+=dy;
