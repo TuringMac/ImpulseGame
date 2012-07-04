@@ -23,12 +23,12 @@ public class ImpulseGame extends javax.swing.JFrame {
      */
     private Ball my;
     private Timer tmr;
-    private JPanel[][] terrain;
-    
+    private Level level;
     public ImpulseGame() {
         initComponents();
-        Level level = new Level();
-        terrain
+        level = new Level(mainBoard);
+        level.buildLevel();
+        
         my = new Ball(mainBoard.getGraphics(),new Position(37.5,37.5));
         
         int delay = 100; //milliseconds
@@ -63,6 +63,7 @@ public class ImpulseGame extends javax.swing.JFrame {
             }
         });
 
+        mainBoard.setBackground(new java.awt.Color(255, 255, 204));
         mainBoard.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 mainBoardMousePressed(evt);
@@ -73,11 +74,11 @@ public class ImpulseGame extends javax.swing.JFrame {
         mainBoard.setLayout(mainBoardLayout);
         mainBoardLayout.setHorizontalGroup(
             mainBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 449, Short.MAX_VALUE)
         );
         mainBoardLayout.setVerticalGroup(
             mainBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 349, Short.MAX_VALUE)
+            .addGap(0, 385, Short.MAX_VALUE)
         );
 
         jLabel1.setText("jLabel1");
@@ -91,22 +92,19 @@ public class ImpulseGame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mainBoard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(0, 488, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(mainBoard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(mainBoard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2))
         );
 
@@ -123,29 +121,8 @@ public class ImpulseGame extends javax.swing.JFrame {
     private void mainBoardMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainBoardMousePressed
         my.setForce(evt.getPoint());
     }//GEN-LAST:event_mainBoardMousePressed
-    /*
-     * Прорисовка уровня игры
-     * @param g   Объект для рисования на нем
-     * @param lvl Уровень для рисования на объекте
-     */
-    public void buildLevel(Graphics g, Level lvl){
-        Color tmp;
-        for(int i=0; i<lvl.getHeight(); i++){
-            for(int j=0; j<lvl.getWidth(); j++){
-                switch(lvl.getMap()[i][j]){
-                    case 0: g.setColor(Color.WHITE);
-                            g.drawRect(j*25, i*25, 25, 25);
-                            break;
-                    case 1: g.setColor(Color.BLACK);
-                            g.drawRect(j*25, i*25, 25, 25);
-                            break;
-                    case 2: break;
-                        
-                    default: break;
-                }
-            }
-        }
-    }
+    
+
     /**
      * @param args the command line arguments
      */
